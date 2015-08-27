@@ -2,7 +2,6 @@
 
 //Hey Diane!
 //Just wanted to prepare you for a buggy site.  Here are some things I know are not working properly:
-//-> stylist update() does not seem to want to work.  The client update() works fine, but i spent about 30 minutes trying to hunt down the bug to no avail.  i decided to comment it out along with the test and produce what i could without that feature.
 //-> the rest of the bugs come from the routing, which i can't say i'm super confident with right now.  I have about 70% of the routes working, with the following I know for sure do not work properly:
     //--> Client update - will route to the correct page, but the updates are not going into the database and changing the values.
     //--> Stylist delete - "No route found for GET/stylists{id}/delete".  It looks correct to me, though.
@@ -30,7 +29,8 @@
     Request::enableHttpMethodParameterOverride();
 
 
-    //landing page which displays all stylists
+//landing page which displays all stylists
+    //displays landing page
     $app->get("/", function() use($app) {
         return $app['twig']->render('index.html.twig', array('stylists' => Stylist::getAll()));
     });
@@ -42,20 +42,14 @@
         return $app['twig']->render('index.html.twig', array('stylists' => Stylist::getAll()));
     });
 
-    //deletes one specific stylist
-    $app->delete("/stylists/{{stylist.getStylistId}}/delete", function($stylist_id) use ($app) {
-        $stylist = Stylist::find($stylist_id);
-        $stylist->delete();
-        return $app['twig']->render('index.html.twig', array('stylists' => Stylist::getAll()));
-    });
-
     //clear database of all stylists
     $app->post('/delete_stylists', function() use($app) {
         Stylist::deleteAll();
         return $app['twig']->render('index.html.twig', array('stylists'=>Stylist::getAll()));
     });
 
-    //brings user to specific stylist page
+//specific stylist page
+    //specific stylist landing page
     $app->get("/stylists/{id}", function($id) use($app) {
         $stylist = Stylist::find($id);
         return $app['twig']->render('stylists.html.twig', array('stylists' => $stylist, 'clients' => $stylist->getClients()));
@@ -67,46 +61,58 @@
         $client_name = $_POST['client_name'];
         $phone = $_POST['phone'];
         $stylist_id = $_POST['stylist_id'];
+
         $client = new Client($client_name, $phone, $stylist_id);
         $client->save();
+
         $stylist = Stylist::find($stylist_id);
         return $app['twig']->render('stylists.html.twig', array('stylists' => $stylist, 'clients' => $stylist->getClients()));
     });
 
-    //brings user to a page that allows a specific client to be edited
-    $app->get('/client/{client_id}/edit', function($client_id) use ($app){
-        $client = Client::find($client_id);
-        return $app['twig']->render('client_edit.html.twig', array('clients'=>$client));
-    });
-
-    //posts edited data to the database to update a property in the existing restaurant
-    $app->patch('/client/{client_id}', function($client_id) use ($app){
-        $client = Client::find($client_id);
-        $stylist = Stylist::find($_POST['stylist_id']);
-        //var_dump($_POST);
-        foreach ($_POST as $key => $value) {
-            if (!empty ($value)) {
-                $client->update($key, $value);
-                //var_dump($client);
-            }
-        }
-        return $app['twig']->render('stylists.html.twig', array('stylists' => $stylist, 'clients' => $stylist->getClients()));
-    });
-
     //delete all clients for a specific stylist
-    $app->post('/delete_clients', function() use($app){
+    $app->post('/delete_clients/{id}', function() use($app){
         Client::deleteAll();
-        return $app['twig']->render('index.html.twig', array('clients'=> Client::getAll(), 'stylists' => Stylist::getAll()));
-    });
-
-    //deletes specific client
-    $app->delete('/client/{client_id}', function($client_id) use ($app){
-        $client = Client::find($client_id);
-        var_dump($client);
-        $stylist = Stylist::find($_POST['stylist_id']);
-        $client->delete();
+        $stylist = $this->getStylistId();
         return $app['twig']->render('stylists.html.twig', array('stylists' => $stylist, 'clients' => $stylist->getClients()));
     });
+
+    // //deletes one specific stylist
+    // $app->delete("/stylists/{{stylist.getStylistId}}/delete", function($stylist_id) use ($app) {
+    //     $stylist = Stylist::find($stylist_id);
+    //     $stylist->delete();
+    //     return $app['twig']->render('index.html.twig', array('stylists' => Stylist::getAll()));
+    // });
+    //
+    // //brings user to a page that allows a specific client to be edited
+    // $app->get('/client/{client_id}/edit', function($client_id) use ($app){
+    //     $client = Client::find($client_id);
+    //     return $app['twig']->render('client_edit.html.twig', array('clients'=>$client));
+    // });
+    //
+    // //posts edited data to the database to update a property in the existing restaurant
+    // $app->patch('/client/{client_id}', function($client_id) use ($app){
+    //     $client = Client::find($client_id);
+    //     $stylist = Stylist::find($_POST['stylist_id']);
+    //     //var_dump($_POST);
+    //     foreach ($_POST as $key => $value) {
+    //         if (!empty ($value)) {
+    //             $client->update($key, $value);
+    //             //var_dump($client);
+    //         }
+    //     }
+    //     return $app['twig']->render('stylists.html.twig', array('stylists' => $stylist, 'clients' => $stylist->getClients()));
+    // });
+    //
+
+    //
+    // //deletes specific client
+    // $app->delete('/client/{client_id}', function($client_id) use ($app){
+    //     $client = Client::find($client_id);
+    //     var_dump($client);
+    //     $stylist = Stylist::find($_POST['stylist_id']);
+    //     $client->delete();
+    //     return $app['twig']->render('stylists.html.twig', array('stylists' => $stylist, 'clients' => $stylist->getClients()));
+    // });
 
 
     return $app;

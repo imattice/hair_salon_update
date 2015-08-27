@@ -49,14 +49,6 @@
             return $clients;
         }
 
-
-    //updates a specific stylist property
-        // function update($new_stylist_name)
-        // {
-        //     $GLOBALS['DB']->exec("UPDATE t_stylists SET name = '{$new_stylist_name}' WHERE id = {$this->getStylistId()};");
-        //     $this->setStylistName($new_stylist_name);
-        // }
-
         function update($new_name)
         {
             $GLOBALS['DB']->exec("UPDATE t_stylists SET name = '{$new_name}' WHERE id = {$this->getStylistId()};");

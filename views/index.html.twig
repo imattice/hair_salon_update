@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+        <title>EpiStylist</title>
+    </head>
+    <body>
+        <div class='container'>
+            <h1>Welcome to the EpiStylist Website!</h1>
+
+            <p>Enter a new Stylist:</p>
+
+            <form action="/stylists" method="post">
+                <div class="form-group">
+                    <label for="stylist_name">Stylist name:</label>
+                    <input id="stylist_name" name="stylist_name" type="text" required>
+                </div>
+                <button type="submit" class="btn btn-success">Add Stylist!</button>
+            </form>
+
+            {% if stylists is not empty %}
+                <p>Here are all current stylists:</p>
+                <ul>
+                    {% for stylist in stylists %}
+                    <li><a href="/stylists/{{ stylist.getStylistId }}">{{ stylist.getStylistName }}</a></li>
+                    {% endfor%}
+                </ul>
+            {% else %}
+                <p>There are no stylists yet!</p>
+            {% endif %}
+
+
+
+            <form action='/delete_stylists' method='post'>
+                <div class="form-group">
+                    <button type='submit' class='btn btn-danger'>Clear all stylists</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

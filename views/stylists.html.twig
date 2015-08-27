@@ -1,0 +1,92 @@
+<html>
+    <head>
+        <title>Stylists</title>
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+    </head>
+    <body>
+        <div class="container">
+            <h1>{{ stylists.getStylistName }}</h1>
+
+            <!-- checks to see if there are any clients to display -->
+            {% if clients is not empty %}
+                <p>Here are {{stylists.getStylistName}}'s current clients:</p>
+                <ul>
+                    <!-- if there are clients, this code will loop through the array of existing clients and pull out the properties and reconstruct the client -->
+                    {% for client in clients %}
+                        <li><strong>{{ client.getClientName }}</strong></li>
+                            <ul>
+                                <li>{{ client.getPhone }}</li>
+                            </ul>
+
+                            <!-- this button redirects the user to a seperate edit page for this specific client -->
+                            <form action='/client/{{ client.getClientId }}/edit'>
+                                <div class="form-group">
+                                    <button type="submit" class='btn btn-primary'>Edit this client</button>
+                                </div>
+                            </form>
+                            <!-- deletes specific client -->
+                            <form action='/client/{client_id}' method='post'>
+                                <div class="form-group">
+                                    <button type="submit" class='btn btn-danger'>Remove this client</button>
+                                    <input name="_method" type="hidden" value="delete">
+                                </div>
+                            </form>
+
+
+                    {% endfor %}
+                </ul>
+                <!-- if there are no clients, display nothing -->
+            {% endif %}
+
+
+            <!-- Form for adding new clients within the current stylist -->
+            <h4>Add a Client</h4>
+            <form action='/clients' method='post'>
+                <div class="form-group">
+                    <!-- hidden input that carries the stylist id with the individual client.  User will not see or edit this property -->
+                    <input id='stylist_id' name='stylist_id' type='hidden' value='{{ stylists.getStylistId }}'>
+                    <label for='client_name'>Client Name</label>
+                    <input id='client_name' name='client_name' type='text' required>
+                </div>
+                <div class="form-group">
+                    <label for='phone'>Phone</label>
+                    <input id='phone' name='phone' type='text' required>
+                </div>
+
+                <!-- Adds new client to stylist -->
+                <button type='submit' class="btn btn-success">Add client</button>
+            </form>
+
+            <!-- Allows user to delete all clients -->
+            <form action='/delete_clients' method="post">
+                <div class="form-group">
+                    <button type="submit" class='btn btn-danger'>Clear all clients</button>
+                </div>
+            </form>
+        </div>
+        <div class="container">
+            <form action='/stylists/{{stylists.getStylistId}}/delete' method='patch'>
+                <div class="form-group">
+                    <button type="submit" class='btn btn-primary'>Edit this stylist</button>
+                </div>
+            </form>
+            <form action='/stylists/{{stylists.getStylistId}}/delete' method='delete'>
+                <div class="form-group">
+                    <button type="submit" class='btn btn-danger'>Remove this stylist</button>
+                </div>
+            </form>
+        </div>
+
+
+            <!-- Allows user to edit the current stylist properties -->
+            <!-- <form action='/stylists/{{ stylists.getStylistId }}/edit'>
+                <div class="form-group">
+                    <button type="submit" class='btn btn-primary'>Edit this stylist</button>
+                </div>
+            </form> -->
+
+            <!-- Brings user back to homepage, displaying all stylists -->
+            <p><a href='/'>Home</a></p>
+        </div>
+    </body>
+</html>

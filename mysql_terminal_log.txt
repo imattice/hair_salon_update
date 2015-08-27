@@ -1,0 +1,46 @@
+Last login: Fri Aug 21 08:41:00 on ttys001
+epicodus-216:~ Guest$ mysql.server start
+Starting MySQL
+. SUCCESS!
+epicodus-216:~ Guest$ mysql -uroot -proot
+Warning: Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.6.26 Homebrew
+
+Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> drop database best_restaurant
+    -> ;
+Query OK, 2 rows affected (0.02 sec)
+
+mysql> create database hair_salon;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> create database hair_salon_test;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use hair_salon
+Database changed
+
+mysql> CREATE TABLE stylist_table (id serial PRIMARY KEY, name VARCHAR (255));
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> CREATE TABLE client_table (id serial PRIMARY KEY, name VARCHAR (255), phone VARCHAR (255), stylist_id INT);
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> DESCRIBE t_stylists
+    -> ;
++--------------+---------------------+------+-----+---------+----------------+
+| Field        | Type                | Null | Key | Default | Extra          |
++--------------+---------------------+------+-----+---------+----------------+
+| id           | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |
+| stylist_name | varchar(255)        | YES  |     | NULL    |                |
++--------------+---------------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)

@@ -16,10 +16,18 @@ Allows the user to manage several independant hair stylists and their clients, i
 3. Run $ mysql.server start
 4. Run $ mysql -uroot -proot
 5. Run $ apachectl start
-6. Import database hair_salon to mysql by logging on to localhost:8080/phpmyadmin and clicking the inport button
+6. Import database hair_salon to mysql by logging on to localhost:8080/phpmyadmin and clicking the import button
 7. Start php server in web directory.
 8. Direct browser to localhost:8000/
 
+
+## Testing
+
+After the initial set up, you can test the functionality of both classes to ensure correct functionality.
+
+1. In phpMyAdmin, select the database hair_salon and click the "operations" button near the top.
+2. Locate the "Copy database to:" section and title the new database hair_salon_test.  Select the structure only option and create this test database by clicking "go".
+3. After the test database has been created, you can run $ phpunit tests to run tests for all functions.
 
 ## Technologies Used
 
